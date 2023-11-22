@@ -14,44 +14,57 @@ from pprint import pprint
 
 
 def getjson(token):
-    # url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=23.001549,%20120.160592&radius=10000&type=lodging&rankby=prominence{}&key=AIzaSyBc4CEv_OjF4AE536UWYiJKP38jd0zPylg'
-    url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=24.092800427982823,%20120.729736010647&radius=10000&type=restaurant&rankby=prominence&key=AIzaSyBc4CEv_OjF4AE536UWYiJKP38jd0zPylg'
+    prefix = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
+    # location = '24.092800427982823,%20120.729736010647'
+    location = '24.5691507,120.9332615'
+    location = location.replace(',', ',%20')
+    print(location)
+    radius = '2000'
+    type = 'lodging',  # 'establishment'  # 'lodging'  # , 'restaurant'
+    key = 'AIzaSyBc4CEv_OjF4AE536UWYiJKP38jd0zPylg'
+    # keyword = 'hotel'
 
-    resp = requests.get(url=url.format(token))
+    # url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=23.001549,%20120.160592&radius=10000&type=lodging&rankby=prominence{}&key=AIzaSyBc4CEv_OjF4AE536UWYiJKP38jd0zPylg'
+    # url = f'{prefix}location={location}&radius={radius}&type={type}&rankby=prominence{token}&key={key}'
+    url = f'{prefix}location={location}&radius={radius}&type={type}&rankby=prominence&{token}&key={key}'
+    print(url)
+
+    resp = requests.get(url=url)
     data = resp.json()
     return data
 
 
 rlist = []
 
-data = getjson('love')
-next_page_token = data['next_page_token']
+data = getjson('')
 rlist.extend(data['results'])
+if 'next_page_token' in data:
+    next_page_token = data['next_page_token']
+    print(0, next_page_token)
 
-print(0, next_page_token)
+    for i in range(10):
+        time.sleep(3)
+        data = getjson(token=f'&pagetoken={next_page_token}')
 
-for i in range(10):
-    time.sleep(3)
-    data = getjson(token='&pagetoken={}'.format(next_page_token))
+        if 'next_page_token' in data.keys():
+            next_page_token = data['next_page_token']
+            rlist.extend(data['results'])
+            print(i+1, next_page_token)
+        else:
+            print(i+1)
+            break
 
-    if 'next_page_token' in data.keys():
-        next_page_token = data['next_page_token']
-        rlist.extend(data['results'])
-        print(i+1, next_page_token)
-    else:
-        print(i+1)
-        break
-
-
-print(len(rlist))
+    print(len(rlist))
 
 # st()
-# rlist = sorted(rlist, key=lambda d: d['rating'])
+
+
+rlist = sorted(rlist, key=lambda d: d['rating'])
 
 for i, d in enumerate(rlist):
     pprint(d)
     print('-------------------')
-# st()
+st()
 
 # for d in r
 # st()
