@@ -1,5 +1,8 @@
 {
     "editor.defaultFormatter": null,
     "editor.formatOnSave": true,
-    "files.autoSave": "onWindowChange"
+    "files.autoSave": "onWindowChange",
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    }
 }

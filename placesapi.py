@@ -5,28 +5,31 @@
 # https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522%2C151.1957362&radius=1500&type=restaurant&keyword=cruise&key=YOUR_API_KEY'
 
 import requests
-import json
-from pdb import set_trace as st
 import time
+import os
+import json
 from pprint import pprint
+from pdb import set_trace as st
 
-# 24.092800427982823,%20120.729736010647&radius=10000&type=restaurant
 
-
-def getjson(token):
-    prefix = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
-    # location = '24.092800427982823,%20120.729736010647'
-    location = '24.5691507,120.9332615'
-    location = location.replace(',', ',%20')
-    print(location)
-    radius = '2000'
-    type = 'lodging',  # 'establishment'  # 'lodging'  # , 'restaurant'
+def get_place_data(location, radius, place_type, token=None):
+    base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
     key = 'AIzaSyBc4CEv_OjF4AE536UWYiJKP38jd0zPylg'
-    # keyword = 'hotel'
 
-    # url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=23.001549,%20120.160592&radius=10000&type=lodging&rankby=prominence{}&key=AIzaSyBc4CEv_OjF4AE536UWYiJKP38jd0zPylg'
-    # url = f'{prefix}location={location}&radius={radius}&type={type}&rankby=prominence{token}&key={key}'
-    url = f'{prefix}location={location}&radius={radius}&type={type}&rankby=prominence&{token}&key={key}'
+    location_str = ','.join(map(str, location))
+    params = {
+        'location': location_str,
+        'radius': radius,
+        'type': place_type,
+        'key': key,
+    }
+    # 'keyword'
+
+    if token:
+        params['pagetoken'] = token
+
+    url = base_url + \
+        '&'.join([f'{key}={value}' for key, value in params.items()])
     print(url)
 
     resp = requests.get(url=url)
@@ -34,37 +37,49 @@ def getjson(token):
     return data
 
 
-rlist = []
+def write_out_result(result_list):
+    os.makedirs('./json', exist_ok=True)
+    for i, place_data in enumerate(result_list):
+        with open(f'./json/{place_data["place_id"]}.json', 'w', encoding='utf8') as f:
+            json.dump(place_data, f, indent=4, ensure_ascii=False)
 
-data = getjson('')
-rlist.extend(data['results'])
-if 'next_page_token' in data:
-    next_page_token = data['next_page_token']
-    print(0, next_page_token)
+        # 	pprint(place_data)
+        # 	print('-------------------')
 
-    for i in range(10):
+
+def run_with_location(location=(24.5691507, 120.9332615)):
+
+    # params
+    # location = (24.5691507, 120.9332615)
+    radius = '2000'
+    place_type = 'lodging'
+
+    count = 0
+    result_list = []
+    next_page_token = 'initial'
+
+    while next_page_token:
+        # print(count, next_page_token)
+        count += 1
         time.sleep(3)
-        data = getjson(token=f'&pagetoken={next_page_token}')
+        if next_page_token == 'initial':
+            next_page_token = None
 
-        if 'next_page_token' in data.keys():
-            next_page_token = data['next_page_token']
-            rlist.extend(data['results'])
-            print(i+1, next_page_token)
-        else:
-            print(i+1)
-            break
+        data = get_place_data(location, radius, place_type, next_page_token)
+        result_list.extend(data.get('results', []))
+        next_page_token = data.get('next_page_token')
 
-    print(len(rlist))
-
-# st()
+    # result_list = sorted(result_list, key=lambda d: d.get('rating', 0))
+    write_out_result(result_list)
+    print(f'location: {location} has {len(result_list)} results')
 
 
-rlist = sorted(rlist, key=lambda d: d['rating'])
+def main():
+    for i in range(5):
+        for j in range(5):
+            run_with_location((24.57 + i * 0.03, 121.02 + j * 0.03))
+    # run_with_location((24.57, 121.02))
 
-for i, d in enumerate(rlist):
-    pprint(d)
-    print('-------------------')
-st()
 
-# for d in r
-# st()
+if __name__ == "__main__":
+    main()
