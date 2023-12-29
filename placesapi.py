@@ -75,11 +75,34 @@ def run_with_location(location=(24.5691507, 120.9332615)):
 
 
 def main():
-    for i in range(5):
-        for j in range(5):
-            run_with_location((24.57 + i * 0.03, 121.02 + j * 0.03))
-    # run_with_location((24.57, 121.02))
+    for i in range(8):
+        for j in range(9):
+            # run_with_location((24.57 + i * 0.03, 121.02 + j * 0.03)) # 苗栗
+            # run_with_location((25.10 + i * 0.03, 121.32 + j * 0.03)) # 陽明山
+            # run_with_location((24.6 + i * 0.05, 121.6 + j * 0.05))  # 宜蘭
+            run_with_location((23.48 + i * 0.03, 119.45 + j * 0.03))  # 澎湖
+            # run_with_location((23.3 + i * 0.02, 119.46 + j * 0.02))  # 澎湖望安
+
+
+# run_with_location((24.57, 121.02))
+
+# 23.698103, 119.457304
+
+
+# 23.696429, 119.696193
+
+# 23.487000, 119.451819
+
+# 25°10′39″N 121°32′51″E
+# 宜蘭
+# 24.838933, 121.599566
+# 24.834537, 121.930872
+# 24.625124, 121.928935
+# 24.612794, 121.593754
 
 
 if __name__ == "__main__":
     main()
+
+
+# https://maps.googleapis.com/maps/api/place/details/json?fields=name%2Crating%2Cformatted_phone_number&place_id=ChIJAQvJcBn7ZzQRTkBj8vz9SI0&key=AIzaSyBc4CEv_OjF4AE536UWYiJKP38jd0zPylg
