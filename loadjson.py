@@ -20,7 +20,7 @@ def main():
                 dict[data['place_id']] = [data['name'], 0, 0]
 
     # sort dict in place by rating from small to large and secondly by user_ratings_total from large to small
-    dict = sorted(dict.items(), key=lambda x: (x[1][1], x[1][2]), reverse=True)
+    dict = sorted(dict.items(), key=lambda x: (x[1][1], x[1][2]), reverse=False)
 
     # dict = sorted(dict.items(), key=lambda x: x[1][1], reverse=False)
     # print data
