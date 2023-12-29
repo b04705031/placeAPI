@@ -10,6 +10,9 @@ def main():
 
         with open(file, 'r', encoding='utf8') as f:
             data = json.load(f)
+            
+            # if data['price_level'] >2:
+                # print(data['name'], data['price_level'])
 
             try:
                 # print(data['name'], data['rating'], data['user_ratings_total'])

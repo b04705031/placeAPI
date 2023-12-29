@@ -54,7 +54,7 @@ def run_with_location(location=(24.5691507, 120.9332615)):
 
     # params
     # location = (24.5691507, 120.9332615)
-    radius = '1000'
+    radius = '2000'
     place_type = 'restaurant'
 
     count = 0
@@ -86,7 +86,10 @@ def main():
             # run_with_location((24.6 + i * 0.05, 121.6 + j * 0.05))  # 宜蘭
             # run_with_location((23.48 + i * 0.03, 119.45 + j * 0.03))  # 澎湖
             # run_with_location((23.3 + i * 0.02, 119.46 + j * 0.02))  # 澎湖望安
-            run_with_location((24.810278 + i * 0.01, 121.043333 + j * 0.01))  # 新竹高鐵
+            # run_with_location((24.810278 + i * 0.01, 121.043333 + j * 0.01))  # 新竹高鐵
+            # run_with_location((25.015 + i * 0.01, 121.214444 + j * 0.01))  # 桃園高鐵
+            # run_with_location((24.6818054 + i * 0.02, 121.3146895 + j * 0.02))  # 桃園高鐵
+
 
 
 # run_with_location((24.57, 121.02))
